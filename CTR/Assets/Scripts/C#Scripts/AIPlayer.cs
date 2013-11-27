@@ -1,3 +1,9 @@
+﻿using UnityEngine;
+using System;
+using System.Collections;
+
+public class AIPlayer : MonoBehaviour {
+
 // ----------- CAR TUTORIAL SAMPLE PROJECT, ? Andrew Gotow 2009 -----------------
 
 // Here's the basic AI driven car script described in my tutorial at www.gotow.net/andrew/blog.
@@ -11,45 +17,48 @@
 
 
 // These variables allow the script to power the wheels of the car.
-var FrontLeftWheel : WheelCollider;
-var FrontRightWheel : WheelCollider;
+WheelCollider FrontLeftWheel ;
+WheelCollider FrontRightWheel  ;
 
 // These variables are for the gears, the array is the list of ratios. The script
 // uses the defined gear ratios to determine how much torque to apply to the wheels.
-var GearRatio : float[];
-var CurrentGear : int = 0;
+public float[] GearRatio ;
+public int CurrentGear = 0;
 
 // These variables are just for applying torque to the wheels and shifting gears.
 // using the defined Max and Min Engine RPM, the script can determine what gear the
 // car needs to be in.
-var EngineTorque : float = 600.0;
-var MaxEngineRPM : float = 3000.0;
-var MinEngineRPM : float = 1000.0;
-private var EngineRPM : float = 0.0;
+float EngineTorque   = 600.0f;
+float MaxEngineRPM  = 3000.0f;
+float MinEngineRPM = 1000.0f;
+private float EngineRPM = 0.0f;
 
-// Here's all the variables for the AI, the waypoints are determined in the "GetWaypoints" function.
+// Here's all the variables for the AI, the waypoints are determined in the "GetWaypoints" void.
 // the waypoint container is used to search for all the waypoints in the scene, and the current
 // waypoint is used to determine which waypoint in the array the car is aiming for.
-var waypointContainer : GameObject;
-private var waypoints : Array;
-private var currentWaypoint : int = 0;
+public GameObject waypointContainer ;
+private  Transform[] waypoints;
+private int currentWaypoint = 0;
 
 // input steer and input torque are the values substituted out for the player input. The 
-// "NavigateTowardsWaypoint" function determines values to use for these variables to move the car
+// "NavigateTowardsWaypoint" void determines values to use for these variables to move the car
 // in the desired direction.
-private var inputSteer : float = 0.0;
-private var inputTorque : float = 0.0;
+private float inputSteer  = 0.0f;
+private float inputTorque  = 0.0f;
 
-function Start () {
+private int AppropriateGear = 0;
+
+
+void Start () {
 	// I usually alter the center of mass to make the car more stable. I'ts less likely to flip this way.
-	rigidbody.centerOfMass.y = -1.5;
+    rigidbody.centerOfMass = new Vector3(rigidbody.centerOfMass.x, -1.5f, rigidbody.centerOfMass.z);
 	
-	// Call the function to determine the array of waypoints. This sets up the array of points by finding
+	// Call the void to determine the array of waypoints. This sets up the array of points by finding
 	// transform components inside of a source container.
 	GetWaypoints();
 }
 
-function Update () {
+void Update () {
 	
 	// This is to limith the maximum speed of the car, adjusting the drag probably isn't the best way of doing it,
 	// but it's easy, and it doesn't interfere with the physics processing.
@@ -59,16 +68,16 @@ function Update () {
 	// applies gas to the engine.
 	NavigateTowardsWaypoint();
 	
-	// Compute the engine RPM based on the average RPM of the two wheels, then call the shift gear function
+	// Compute the engine RPM based on the average RPM of the two wheels, then call the shift gear void
 	EngineRPM = (FrontLeftWheel.rpm + FrontRightWheel.rpm)/2 * GearRatio[CurrentGear];
 	ShiftGears();
 
 	// set the audio pitch to the percentage of RPM to the maximum RPM plus one, this makes the sound play
 	// up to twice it's pitch, where it will suddenly drop when it switches gears.
-	audio.pitch = Mathf.Abs(EngineRPM / MaxEngineRPM) + 1.0 ;
+	audio.pitch = Mathf.Abs(EngineRPM / MaxEngineRPM) + 1.0f ;
 	// this line is just to ensure that the pitch does not reach a value higher than is desired.
-	if ( audio.pitch > 2.0 ) {
-		audio.pitch = 2.0;
+	if ( audio.pitch > 2.0f ) {
+		audio.pitch = 2.0f;
 	}
 	
 	// finally, apply the values to the wheels.	The torque applied is divided by the current gear, and
@@ -81,13 +90,13 @@ function Update () {
 	FrontRightWheel.steerAngle = 10 * inputSteer;
 }
 
-function ShiftGears() {
+void ShiftGears() {
 	// this funciton shifts the gears of the vehcile, it loops through all the gears, checking which will make
 	// the engine RPM fall within the desired range. The gear is then set to this "appropriate" value.
 	if ( EngineRPM >= MaxEngineRPM ) {
-		var AppropriateGear : int = CurrentGear;
+		AppropriateGear  = CurrentGear;
 		
-		for ( var i = 0; i < GearRatio.length; i ++ ) {
+		for ( var i = 0; i < GearRatio.Length; i ++ ) {
 			if ( FrontLeftWheel.rpm * GearRatio[i] < MaxEngineRPM ) {
 				AppropriateGear = i;
 				break;
@@ -100,7 +109,7 @@ function ShiftGears() {
 	if ( EngineRPM <= MinEngineRPM ) {
 		AppropriateGear = CurrentGear;
 		
-		for ( var j = GearRatio.length-1; j >= 0; j -- ) {
+		for ( var j = GearRatio.Length-1; j >= 0; j -- ) {
 			if ( FrontLeftWheel.rpm * GearRatio[j] > MinEngineRPM ) {
 				AppropriateGear = j;
 				break;
@@ -111,23 +120,24 @@ function ShiftGears() {
 	}
 }
 
-function GetWaypoints () {
-	// Now, this function basically takes the container object for the waypoints, then finds all of the transforms in it,
+void GetWaypoints () {
+	// Now, this void basically takes the container object for the waypoints, then finds all of the transforms in it,
 	// once it has the transforms, it checks to make sure it's not the container, and adds them to the array of waypoints.
-	var potentialWaypoints : Array = waypointContainer.GetComponentsInChildren( Transform );
-	waypoints = new Array();
-	
-	for ( var potentialWaypoint : Transform in potentialWaypoints ) {
+	Transform[] potentialWaypoints  = waypointContainer.GetComponentsInChildren<Transform>();
+	//waypoints = new Array();
+
+    foreach (Transform potentialWaypoint in potentialWaypoints)
+    {
 		if ( potentialWaypoint != waypointContainer.transform ) {
-			waypoints[ waypoints.length ] = potentialWaypoint;
+			waypoints[ waypoints.Length] = potentialWaypoint;
 		}
 	}
 }
 
-function NavigateTowardsWaypoint () {
+void NavigateTowardsWaypoint () {
 	// now we just find the relative position of the waypoint from the car transform,
 	// that way we can determine how far to the left and right the waypoint is.
-	var RelativeWaypointPosition : Vector3 = transform.InverseTransformPoint( Vector3( 
+    Vector3 RelativeWaypointPosition = transform.InverseTransformPoint(new Vector3( 
 												waypoints[currentWaypoint].position.x, 
 												transform.position.y, 
 												waypoints[currentWaypoint].position.z ) );
@@ -142,7 +152,7 @@ function NavigateTowardsWaypoint () {
 		inputTorque = RelativeWaypointPosition.z / RelativeWaypointPosition.magnitude - Mathf.Abs( inputSteer );
 	}else
     {
-		inputTorque = 0.0;
+        inputTorque = 0.0f;
 	}
 	
 	// this just checks if the car's position is near enough to a waypoint to count as passing it, if it is, then change the target waypoint to the
@@ -150,9 +160,10 @@ function NavigateTowardsWaypoint () {
 	if ( RelativeWaypointPosition.magnitude < 20 ) {
 		currentWaypoint ++;
 		
-		if ( currentWaypoint >= waypoints.length ) {
+		if ( currentWaypoint >= waypoints.Length ) {
 			currentWaypoint = 0;
 		}
 	}
 	
+}
 }
