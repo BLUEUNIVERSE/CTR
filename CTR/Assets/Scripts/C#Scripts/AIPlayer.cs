@@ -2,40 +2,12 @@
 using System;
 using System.Collections;
 
-public class AIPlayer : MonoBehaviour {
-
-// ----------- CAR TUTORIAL SAMPLE PROJECT, ? Andrew Gotow 2009 -----------------
-
-// Here's the basic AI driven car script described in my tutorial at www.gotow.net/andrew/blog.
-// A Complete explaination of how this script works can be found at the link above, along
-// with detailed instructions on how to write one of your own, and tips on what values to 
-// assign to the script variables for it to work well for your application.
-
-// Contact me at Maxwelldoggums@Gmail.com for more information.
-
-
-
-
-// These variables allow the script to power the wheels of the car.
-WheelCollider FrontLeftWheel ;
-WheelCollider FrontRightWheel  ;
-
-// These variables are for the gears, the array is the list of ratios. The script
-// uses the defined gear ratios to determine how much torque to apply to the wheels.
-public float[] GearRatio ;
-public int CurrentGear = 0;
-
-// These variables are just for applying torque to the wheels and shifting gears.
-// using the defined Max and Min Engine RPM, the script can determine what gear the
-// car needs to be in.
-float EngineTorque   = 600.0f;
-float MaxEngineRPM  = 3000.0f;
-float MinEngineRPM = 1000.0f;
-private float EngineRPM = 0.0f;
+public class AIPlayer : CarMechanicsBase 
+{
 
 // Here's all the variables for the AI, the waypoints are determined in the "GetWaypoints" void.
-// the waypoint container is used to search for all the waypoints in the scene, and the current
-// waypoint is used to determine which waypoint in the array the car is aiming for.
+// the way point container is used to search for all the waypoints in the scene, and the current
+// way point is used to determine which way point in the array the car is aiming for.
 public GameObject waypointContainer ;
 private  Transform[] waypoints;
 private int currentWaypoint = 0;
@@ -50,7 +22,7 @@ private int AppropriateGear = 0;
 
 
 void Start () {
-	// I usually alter the center of mass to make the car more stable. I'ts less likely to flip this way.
+	// I usually alter the center of mass to make the car more stable. Its less likely to flip this way.
     rigidbody.centerOfMass = new Vector3(rigidbody.centerOfMass.x, -1.5f, rigidbody.centerOfMass.z);
 	
 	// Call the void to determine the array of waypoints. This sets up the array of points by finding
@@ -60,64 +32,17 @@ void Start () {
 
 void Update () {
 	
-	// This is to limith the maximum speed of the car, adjusting the drag probably isn't the best way of doing it,
+	// This is to limit the maximum speed of the car, adjusting the drag probably isn't the best way of doing it,
 	// but it's easy, and it doesn't interfere with the physics processing.
 	rigidbody.drag = rigidbody.velocity.magnitude / 250;
 	
-	// Call the funtion to determine the desired input values for the car. This essentially steers and
+	// Call the function to determine the desired input values for the car. This essentially steers and
 	// applies gas to the engine.
 	NavigateTowardsWaypoint();
-	
-	// Compute the engine RPM based on the average RPM of the two wheels, then call the shift gear void
-	EngineRPM = (FrontLeftWheel.rpm + FrontRightWheel.rpm)/2 * GearRatio[CurrentGear];
-	ShiftGears();
 
-	// set the audio pitch to the percentage of RPM to the maximum RPM plus one, this makes the sound play
-	// up to twice it's pitch, where it will suddenly drop when it switches gears.
-	audio.pitch = Mathf.Abs(EngineRPM / MaxEngineRPM) + 1.0f ;
-	// this line is just to ensure that the pitch does not reach a value higher than is desired.
-	if ( audio.pitch > 2.0f ) {
-		audio.pitch = 2.0f;
-	}
+    Vector3 input = new Vector3(inputSteer,inputTorque,0);
+    CarUpdate(input);
 	
-	// finally, apply the values to the wheels.	The torque applied is divided by the current gear, and
-	// multiplied by the calculated AI input variable.
-	FrontLeftWheel.motorTorque = EngineTorque / GearRatio[CurrentGear] * inputTorque;
-	FrontRightWheel.motorTorque = EngineTorque / GearRatio[CurrentGear] * inputTorque;
-		
-	// the steer angle is an arbitrary value multiplied by the calculated AI input.
-	FrontLeftWheel.steerAngle = 10 * inputSteer;
-	FrontRightWheel.steerAngle = 10 * inputSteer;
-}
-
-void ShiftGears() {
-	// this funciton shifts the gears of the vehcile, it loops through all the gears, checking which will make
-	// the engine RPM fall within the desired range. The gear is then set to this "appropriate" value.
-	if ( EngineRPM >= MaxEngineRPM ) {
-		AppropriateGear  = CurrentGear;
-		
-		for ( var i = 0; i < GearRatio.Length; i ++ ) {
-			if ( FrontLeftWheel.rpm * GearRatio[i] < MaxEngineRPM ) {
-				AppropriateGear = i;
-				break;
-			}
-		}
-		
-		CurrentGear = AppropriateGear;
-	}
-	
-	if ( EngineRPM <= MinEngineRPM ) {
-		AppropriateGear = CurrentGear;
-		
-		for ( var j = GearRatio.Length-1; j >= 0; j -- ) {
-			if ( FrontLeftWheel.rpm * GearRatio[j] > MinEngineRPM ) {
-				AppropriateGear = j;
-				break;
-			}
-		}
-		
-		CurrentGear = AppropriateGear;
-	}
 }
 
 void GetWaypoints () {
@@ -135,8 +60,8 @@ void GetWaypoints () {
 }
 
 void NavigateTowardsWaypoint () {
-	// now we just find the relative position of the waypoint from the car transform,
-	// that way we can determine how far to the left and right the waypoint is.
+	// now we just find the relative position of the way point from the car transform,
+	// that way we can determine how far to the left and right the way point is.
     Vector3 RelativeWaypointPosition = transform.InverseTransformPoint(new Vector3( 
 												waypoints[currentWaypoint].position.x, 
 												transform.position.y, 
@@ -155,7 +80,7 @@ void NavigateTowardsWaypoint () {
         inputTorque = 0.0f;
 	}
 	
-	// this just checks if the car's position is near enough to a waypoint to count as passing it, if it is, then change the target waypoint to the
+	// this just checks if the car's position is near enough to a way point to count as passing it, if it is, then change the target way point to the
 	// next in the list.
 	if ( RelativeWaypointPosition.magnitude < 20 ) {
 		currentWaypoint ++;
