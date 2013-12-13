@@ -23,8 +23,7 @@ public class CarControl : CarMechanicsBase
 
 	dir = Input.acceleration;
 	
-
-	// clamp acceleration vector to the unit sphere
+	// clamp acceleration vector to the unit sphere 
 	if (dir.sqrMagnitude > 1)
 		dir.Normalize();
 
@@ -39,11 +38,10 @@ public class CarControl : CarMechanicsBase
        
     }
 
-
     void OnGUI()
     {
-        string str  = "X = " + dir.x + "Y = " + dir.y + "Z = " + dir.z;
-        GUI.Button(new Rect(5, 5, 200, 50),str);
+        string str  = "X = " + dir.x + "  Y = " + dir.y + "  Z = " + dir.z;
+        GUI.Button(new Rect(5, 5, 1024, 50),str);
     }
 
 }
