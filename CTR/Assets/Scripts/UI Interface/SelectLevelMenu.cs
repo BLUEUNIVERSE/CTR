@@ -20,8 +20,17 @@ public class SelectLevelMenu : MonoBehaviour {
     private float avgDistance;
     private float minSwipeDistance = 10;
 
+
+    public TweenScale race1Details;
+    public TweenScale race2Details;
+    public TweenScale race3Details;
+
 	// Use this for initialization
 	void Start () {
+
+        race1Details.Play(false);
+        race2Details.Play(false);
+        race3Details.Play(false);
 
         
 	
@@ -59,7 +68,7 @@ public class SelectLevelMenu : MonoBehaviour {
             }
         }
 
-        if (Application.platform == RuntimePlatform.WindowsEditor)
+        if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer)
         {
             if (Input.GetButtonDown("Fire1"))
             {
@@ -111,7 +120,7 @@ public class SelectLevelMenu : MonoBehaviour {
          //        transform.position = Vector3.Lerp(transform.position, new Vector3((i - 1) * 10, transform.position.y, transform.position.z), 5.0f * Time.deltaTime);
          //}
 
-         if (Application.platform == RuntimePlatform.WindowsEditor )
+        if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer)
          {
              if (Input.GetKeyUp(KeyCode.DownArrow))
              {
@@ -137,16 +146,40 @@ public class SelectLevelMenu : MonoBehaviour {
 
     void OnRace1()
     {
-        Application.LoadLevel("Select Car C");
+        race1Details.Play(true);
+        //Application.LoadLevel("Select Car C");
     }
 
     void OnRace2()
     {
-        Application.LoadLevel("Select Car B");
+        race2Details.Play(true);
+        //Application.LoadLevel("Select Car B");
     }
 
     void OnRace3()
     {
+        race3Details.Play(true);
+        
+    }
+    void AcceptRace1()
+    {
+        Application.LoadLevel("Select Car C");
+    }
+
+    void AcceptRace2()
+    {
+        Application.LoadLevel("Select Car B");
+    }
+
+    void AcceptRace3()
+    {
         Application.LoadLevel("Select Car A");
+    }
+
+    void CloseRace3()
+    {
+        race1Details.Play(false);
+        race2Details.Play(false);
+        race3Details.Play(false);
     }
 }

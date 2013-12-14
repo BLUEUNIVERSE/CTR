@@ -8,6 +8,9 @@ public class NewCarSelectMenu : MonoBehaviour {
     private int maxPos;
     private int minPos;
     private int currentCarNumber = 1;
+    public GameObject spawnParticles;
+    private GameObject spawnParticlesPrefab;
+    public Transform spawnParticlesPoint;
 
     // info about coins and costs for cars
     public UILabel totalCoinsLabel;
@@ -92,7 +95,10 @@ public class NewCarSelectMenu : MonoBehaviour {
                 else if (swipeDistx.x < -(Screen.height / 5))
                 {
                     if (currentCarNumber > 1)
+                    {
+                        spawnParticlesPrefab = (GameObject)Instantiate(spawnParticles, spawnParticlesPoint.position, spawnParticlesPoint.rotation);
                         currentCarNumber--;
+                    }
                 }
             }
         }
@@ -166,6 +172,7 @@ public class NewCarSelectMenu : MonoBehaviour {
                 {
                     raceButton.Play(false);
                     stickerButtons.Play(true);
+                    upgradeButton.Play(false);
                     sun.intensity = 3.0f;
                     upgradeCostLabel.text = "Upgrade $" + cars[temp].GetComponent<CarProperties>().coinsToUpgradeLevel3.ToString();
                     newSpeed.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().speedLevels[2], newSpeed.foreground.localScale.y, newSpeed.foreground.localScale.z);
@@ -261,12 +268,12 @@ public class NewCarSelectMenu : MonoBehaviour {
 
     void OnSticker1()
     {
-        if (cars[currentCarNumber - 1].GetComponent<CarProperties>().carLevel > 0)
+        if (cars[currentCarNumber - 1].GetComponent<CarProperties>().carLevel == 1)
         {
             cars[currentCarNumber - 1].renderer.material.mainTexture = cars[0].GetComponent<CarProperties>().stickers[0];
 
-            if (cars[currentCarNumber - 1].GetComponent<CarProperties>().sticker1Unlocked == true)
-                cars[currentCarNumber - 1].GetComponent<CarProperties>().currentSticker = cars[currentCarNumber - 1].GetComponent<CarProperties>().stickers[0];
+            //if (cars[currentCarNumber - 1].GetComponent<CarProperties>().sticker1Unlocked == true)
+            //    cars[currentCarNumber - 1].GetComponent<CarProperties>().currentSticker = cars[currentCarNumber - 1].GetComponent<CarProperties>().stickers[0];
 
         }
     }
@@ -315,12 +322,18 @@ public class NewCarSelectMenu : MonoBehaviour {
             if (swipeDist.x < -50)
             {
                 if (currentCarNumber < numberOfCars)
+                {
+                    spawnParticlesPrefab = (GameObject)Instantiate(spawnParticles, cars[currentCarNumber].transform.position, cars[currentCarNumber].transform.rotation);
                     currentCarNumber++;
+                }
             }
             else if (swipeDist.x > 50)
             {
                 if (currentCarNumber > 1)
+                {
+                    spawnParticlesPrefab = (GameObject)Instantiate(spawnParticles, cars[currentCarNumber-2].transform.position, cars[currentCarNumber-2].transform.rotation);
                     currentCarNumber--;
+                }
             }
         }
         if (Application.platform == RuntimePlatform.WindowsEditor)
