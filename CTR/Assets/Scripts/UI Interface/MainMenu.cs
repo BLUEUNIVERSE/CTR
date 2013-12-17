@@ -145,5 +145,10 @@ public class MainMenu : MonoBehaviour {
     {
         settingsPanel.Play(false);
     }
+
+    void OnExit()
+    {
+        Application.Quit();
+    }
 }
 
