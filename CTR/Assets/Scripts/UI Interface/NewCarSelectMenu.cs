@@ -151,7 +151,7 @@ public class NewCarSelectMenu : MonoBehaviour {
                     unlockButton.Play(true);
                     raceButton.Play(false);
                     stickerButtons.Play(true);
-                    sun.intensity = 3.0f;
+                    sun.intensity = 8.0f;
                     upgradeCostLabel.text = "Upgrade $" + cars[temp].GetComponent<CarProperties>().coinsToUpgradeLevel2.ToString();
                     newSpeed.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().speedLevels[1], newSpeed.foreground.localScale.y, newSpeed.foreground.localScale.z);
                     speed.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().speedLevels[0], speed.foreground.localScale.y, speed.foreground.localScale.z);
@@ -173,7 +173,7 @@ public class NewCarSelectMenu : MonoBehaviour {
                     raceButton.Play(false);
                     stickerButtons.Play(true);
                     upgradeButton.Play(false);
-                    sun.intensity = 3.0f;
+                    sun.intensity = 8.0f;
                     upgradeCostLabel.text = "Upgrade $" + cars[temp].GetComponent<CarProperties>().coinsToUpgradeLevel3.ToString();
                     newSpeed.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().speedLevels[2], newSpeed.foreground.localScale.y, newSpeed.foreground.localScale.z);
                     speed.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().speedLevels[1], speed.foreground.localScale.y, speed.foreground.localScale.z);
@@ -196,7 +196,7 @@ public class NewCarSelectMenu : MonoBehaviour {
                     unlockButton.Play(true);
                     raceButton.Play(false);
                     stickerButtons.Play(true);
-                    sun.intensity = 3.0f;
+                    sun.intensity = 8.0f;
                     upgradeCostLabel.text = "MAX LEVEL";
                     newSpeed.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().speedLevels[2], newSpeed.foreground.localScale.y, newSpeed.foreground.localScale.z);
                     speed.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().speedLevels[2], speed.foreground.localScale.y, speed.foreground.localScale.z);
