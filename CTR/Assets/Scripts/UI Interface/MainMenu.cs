@@ -58,6 +58,8 @@ public class MainMenu : MonoBehaviour {
             Debug.Log(temp2.x + " " + temp2.y + " " + temp2.z);
             tempTime += 5;
         }
+
+    
         
         
         
