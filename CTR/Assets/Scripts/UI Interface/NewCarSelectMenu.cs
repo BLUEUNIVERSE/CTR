@@ -96,7 +96,7 @@ public class NewCarSelectMenu : MonoBehaviour {
                 {
                     if (currentCarNumber > 1)
                     {
-                        spawnParticlesPrefab = (GameObject)Instantiate(spawnParticles, spawnParticlesPoint.position, spawnParticlesPoint.rotation);
+                        //spawnParticlesPrefab = (GameObject)Instantiate(spawnParticles, spawnParticlesPoint.position, spawnParticlesPoint.rotation);
                         currentCarNumber--;
                     }
                 }
@@ -226,12 +226,14 @@ public class NewCarSelectMenu : MonoBehaviour {
                 cars[currentCarNumber - 1].GetComponent<CarProperties>().carLevel++;
                 totalCoins -= cars[currentCarNumber - 1].GetComponent<CarProperties>().coinsToUpgradeLevel2;
                 totalCoinsLabel.text = totalCoins.ToString();
+                spawnParticlesPrefab = (GameObject)Instantiate(spawnParticles, spawnParticlesPoint.position, spawnParticlesPoint.rotation);
             }
             else if (cars[currentCarNumber - 1].GetComponent<CarProperties>().carLevel == 2 && totalCoins >=  cars[currentCarNumber - 1].GetComponent<CarProperties>().coinsToUpgradeLevel3)
             {
                 cars[currentCarNumber - 1].GetComponent<CarProperties>().carLevel++;
                 totalCoins -= cars[currentCarNumber - 1].GetComponent<CarProperties>().coinsToUpgradeLevel3;
                 totalCoinsLabel.text = totalCoins.ToString();
+                spawnParticlesPrefab = (GameObject)Instantiate(spawnParticles, spawnParticlesPoint.position, spawnParticlesPoint.rotation);
             }
             Debug.Log(cars[currentCarNumber - 1].GetComponent<CarProperties>().carLevel);
         
@@ -242,6 +244,7 @@ public class NewCarSelectMenu : MonoBehaviour {
 
         if (totalCoins >= cars[currentCarNumber - 1].GetComponent<CarProperties>().coinsToUnlock)
         {
+            spawnParticlesPrefab = (GameObject)Instantiate(spawnParticles, spawnParticlesPoint.position, spawnParticlesPoint.rotation);
             cars[currentCarNumber - 1].GetComponent<CarProperties>().carLevel++;
             totalCoins -= cars[currentCarNumber - 1].GetComponent<CarProperties>().coinsToUnlock;
             totalCoinsLabel.text = totalCoins.ToString();
@@ -323,7 +326,7 @@ public class NewCarSelectMenu : MonoBehaviour {
             {
                 if (currentCarNumber < numberOfCars)
                 {
-                    spawnParticlesPrefab = (GameObject)Instantiate(spawnParticles, cars[currentCarNumber].transform.position, cars[currentCarNumber].transform.rotation);
+                    //spawnParticlesPrefab = (GameObject)Instantiate(spawnParticles, cars[currentCarNumber].transform.position, cars[currentCarNumber].transform.rotation);
                     currentCarNumber++;
                 }
             }
@@ -331,7 +334,7 @@ public class NewCarSelectMenu : MonoBehaviour {
             {
                 if (currentCarNumber > 1)
                 {
-                    spawnParticlesPrefab = (GameObject)Instantiate(spawnParticles, cars[currentCarNumber-2].transform.position, cars[currentCarNumber-2].transform.rotation);
+                    //spawnParticlesPrefab = (GameObject)Instantiate(spawnParticles, cars[currentCarNumber-2].transform.position, cars[currentCarNumber-2].transform.rotation);
                     currentCarNumber--;
                 }
             }
