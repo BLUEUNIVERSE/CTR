@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using System;
 using System.Collections;
 
@@ -9,7 +10,7 @@ public class AIPlayer : CarMechanicsBase
 // the way point container is used to search for all the waypoints in the scene, and the current
 // way point is used to determine which way point in the array the car is aiming for.
 public GameObject waypointContainer ;
-private  Transform[] waypoints;
+private List<Transform> waypoints = new List<Transform>();
 private int currentWaypoint = 0;
 
 // input steer and input torque are the values substituted out for the player input. The 
@@ -49,12 +50,12 @@ void GetWaypoints () {
 	// Now, this void basically takes the container object for the waypoints, then finds all of the transforms in it,
 	// once it has the transforms, it checks to make sure it's not the container, and adds them to the array of waypoints.
 	Transform[] potentialWaypoints  = waypointContainer.GetComponentsInChildren<Transform>();
-	//waypoints = new Array();
+	
 
     foreach (Transform potentialWaypoint in potentialWaypoints)
     {
 		if ( potentialWaypoint != waypointContainer.transform ) {
-			waypoints[ waypoints.Length] = potentialWaypoint;
+			waypoints.Add(potentialWaypoint);
 		}
 	}
 }
@@ -85,7 +86,7 @@ void NavigateTowardsWaypoint () {
 	if ( RelativeWaypointPosition.magnitude < 20 ) {
 		currentWaypoint ++;
 		
-		if ( currentWaypoint >= waypoints.Length ) {
+		if ( currentWaypoint >= waypoints.Count ) {
 			currentWaypoint = 0;
 		}
 	}
