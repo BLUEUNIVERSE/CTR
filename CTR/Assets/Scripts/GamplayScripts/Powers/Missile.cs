@@ -32,9 +32,9 @@ public class Missile : Power
     {
         if (Time.time >= (timeCount + LifeTime) - 0.5f)
         {
-            if (this.GetComponent("Damage"))
+            if (GetComponent<Damage>())
             {
-                this.GetComponent("Damage");
+                GetComponent<Damage>();
             }
         }
         if (Seeker)
@@ -102,6 +102,10 @@ public class Missile : Power
 
     }
 
-
+    public override void CollisionResponse()
+    {
+        //base.CollisionResponse();
+        
+    }
 
 }
