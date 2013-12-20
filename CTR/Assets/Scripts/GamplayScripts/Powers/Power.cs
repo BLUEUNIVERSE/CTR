@@ -22,6 +22,11 @@ public class Power : MonoBehaviour
 
     }
 
+    virtual public void CollisionResponse()
+    {
+
+    }
+
 }
 
 public enum PowerType 
