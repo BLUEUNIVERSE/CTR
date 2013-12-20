@@ -20,6 +20,9 @@ public class CarProperties : MonoBehaviour {
     public bool sticker1Unlocked = true;
     public bool sticker2Unlocked = false;
     public bool sticker3Unlocked = false;
+    public int perk1;
+    public int perk2;
+    public int perk3;
 
     public int coinsForSticker2 = 1000;
     

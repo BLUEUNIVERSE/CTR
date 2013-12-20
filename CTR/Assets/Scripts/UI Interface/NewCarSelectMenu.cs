@@ -55,6 +55,18 @@ public class NewCarSelectMenu : MonoBehaviour {
     public UILabel coins;
 
 
+    // Perks stuff
+    public TweenPosition perkTween;
+    private bool isSelectingPerk = false;
+    public UIImageButton perk1;
+    public UIImageButton perk2;
+    public UIImageButton perk3;
+    private int currentPerkSlotNumber;
+    public int slot1Perk;
+    public int slot2Perk;
+    public int slot3Perk;
+
+
 	// Use this for initialization
 	void Start () {
 
@@ -119,9 +131,11 @@ public class NewCarSelectMenu : MonoBehaviour {
                 else
                     purchaseSticker2.Play(true);
 
+
+                CheckCarPerk(temp);
+
+                if (cars[temp].GetComponent<CarProperties>().carLevel == 0) 
                
-              
-                if (cars[temp].GetComponent<CarProperties>().carLevel == 0)
                 {
                     upgradeButton.Play(true);
                     unlockButton.Play(false);
@@ -129,6 +143,9 @@ public class NewCarSelectMenu : MonoBehaviour {
                     purchaseSticker2.Play(false);
                     stickerButtons.Play(false);
                     sun.intensity = 0.2f;
+                   
+                    //perk1.enabled = false;
+                    //perk1.enabled = true;
                     upgradeCostLabel.text = "Unlock $" + cars[temp].GetComponent<CarProperties>().coinsToUnlock.ToString();
                     newSpeed.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().speedLevels[0], newSpeed.foreground.localScale.y, newSpeed.foreground.localScale.z);
                     speed.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().speedLevels[0], speed.foreground.localScale.y, speed.foreground.localScale.z);
@@ -152,6 +169,8 @@ public class NewCarSelectMenu : MonoBehaviour {
                     raceButton.Play(false);
                     stickerButtons.Play(true);
                     sun.intensity = 8.0f;
+                   
+                   
                     upgradeCostLabel.text = "Upgrade $" + cars[temp].GetComponent<CarProperties>().coinsToUpgradeLevel2.ToString();
                     newSpeed.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().speedLevels[1], newSpeed.foreground.localScale.y, newSpeed.foreground.localScale.z);
                     speed.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().speedLevels[0], speed.foreground.localScale.y, speed.foreground.localScale.z);
@@ -306,6 +325,133 @@ public class NewCarSelectMenu : MonoBehaviour {
         }
     }
 
+    void OnPerk1()
+    {
+        currentPerkSlotNumber = 1;
+        isSelectingPerk = true;
+        perkTween.Play(true);
+    }
+    void OnPerk2()
+    {
+        currentPerkSlotNumber = 2;
+        isSelectingPerk = true;
+        perkTween.Play(true);
+    }
+    void OnPerk3()
+    {
+        currentPerkSlotNumber = 3;
+        isSelectingPerk = true;
+        perkTween.Play(true);
+    }
+
+    void OnPerkExit()
+    {
+        isSelectingPerk = false;
+        perkTween.Play(false);
+    }
+
+    void OnEnergyPerk()
+    {
+        if (currentPerkSlotNumber == 1)
+        {
+            slot1Perk = 1;
+            perk1.normalSprite = "exit button";
+            perk1.hoverSprite = "exit button";
+            perk1.pressedSprite = "exit button";
+            cars[currentCarNumber - 1].GetComponent<CarProperties>().perk1 = 1;
+            perk1.enabled = false;
+            perk1.enabled = true;
+
+            print("slot 1 perk = energy");
+        }
+        else if (currentPerkSlotNumber == 2)
+        {
+            slot2Perk = 1;
+            perk2.normalSprite = "exit button";
+            perk2.hoverSprite = "exit button";
+            perk2.pressedSprite = "exit button";
+            cars[currentCarNumber - 1].GetComponent<CarProperties>().perk2 = 1;
+
+            print("slot 2 perk = energy");
+        }
+        else if (currentPerkSlotNumber == 3)
+        {
+            slot3Perk = 1;
+            perk3.normalSprite = "exit button";
+            perk3.hoverSprite = "exit button";
+            perk3.pressedSprite = "exit button";
+
+            cars[currentCarNumber - 1].GetComponent<CarProperties>().perk3 = 1;
+            print("slot 3 perk = energy");
+        }
+
+    }
+
+    void OnPerkTime()
+    {
+        if (currentPerkSlotNumber == 1)
+        {
+            slot1Perk = 1;
+            perk1.normalSprite = "exit button";
+            perk1.hoverSprite = "exit button";
+            perk1.pressedSprite = "exit button";
+            cars[currentCarNumber - 1].GetComponent<CarProperties>().perk1 = 2;
+            perk1.enabled = false;
+            perk1.enabled = true;
+
+            print("slot 1 perk = energy");
+        }
+        else if (currentPerkSlotNumber == 2)
+        {
+            slot2Perk = 1;
+            perk2.normalSprite = "exit button";
+            perk2.hoverSprite = "exit button";
+            perk2.pressedSprite = "exit button";
+            cars[currentCarNumber - 1].GetComponent<CarProperties>().perk2 = 2;
+
+            print("slot 2 perk = energy");
+        }
+        else if (currentPerkSlotNumber == 3)
+        {
+            slot3Perk = 1;
+            perk3.normalSprite = "exit button";
+            perk3.hoverSprite = "exit button";
+            perk3.pressedSprite = "exit button";
+
+            cars[currentCarNumber - 1].GetComponent<CarProperties>().perk3 = 2;
+            print("slot 3 perk = energy");
+        }
+    }
+
+    void CheckCarPerk(int carNumber)
+    {
+        if (cars[carNumber].GetComponent<CarProperties>().perk1 == 0)
+        {
+            perk1.normalSprite = "profile BG light";
+            perk1.hoverSprite = "profile BG light";
+            perk1.pressedSprite = "profile BG light";
+            perk1.enabled = false;
+            perk1.enabled = true;
+        }
+        else if (cars[carNumber].GetComponent<CarProperties>().perk1 == 1)
+        {
+            perk1.normalSprite = "dim BG";
+            perk1.hoverSprite = "dim BG";
+            perk1.pressedSprite = "dim BG";
+            perk1.enabled = false;
+            perk1.enabled = true;
+        }
+        else if (cars[carNumber].GetComponent<CarProperties>().perk1 == 2)
+        {
+            perk1.normalSprite = "exit button";
+            perk1.hoverSprite = "exit button";
+            perk1.pressedSprite = "exit button";
+            perk1.enabled = false;
+            perk1.enabled = true;
+        }
+    }
+
+
     void MoveCamera()
     {
 
@@ -324,18 +470,24 @@ public class NewCarSelectMenu : MonoBehaviour {
             //float avgDistY = touch.position.y - startPos.y;
             if (swipeDist.x < -50)
             {
-                if (currentCarNumber < numberOfCars)
+                if (isSelectingPerk == false)
                 {
-                    //spawnParticlesPrefab = (GameObject)Instantiate(spawnParticles, cars[currentCarNumber].transform.position, cars[currentCarNumber].transform.rotation);
-                    currentCarNumber++;
+                    if (currentCarNumber < numberOfCars)
+                    {
+                        //spawnParticlesPrefab = (GameObject)Instantiate(spawnParticles, cars[currentCarNumber].transform.position, cars[currentCarNumber].transform.rotation);
+                        currentCarNumber++;
+                    }
                 }
             }
             else if (swipeDist.x > 50)
             {
-                if (currentCarNumber > 1)
+                if (isSelectingPerk == false)
                 {
-                    //spawnParticlesPrefab = (GameObject)Instantiate(spawnParticles, cars[currentCarNumber-2].transform.position, cars[currentCarNumber-2].transform.rotation);
-                    currentCarNumber--;
+                    if (currentCarNumber > 1)
+                    {
+                        //spawnParticlesPrefab = (GameObject)Instantiate(spawnParticles, cars[currentCarNumber-2].transform.position, cars[currentCarNumber-2].transform.rotation);
+                        currentCarNumber--;
+                    }
                 }
             }
         }
