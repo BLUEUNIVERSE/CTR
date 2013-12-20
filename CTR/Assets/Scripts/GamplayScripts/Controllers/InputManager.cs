@@ -116,12 +116,7 @@ public class InputManager : MonoBehaviour
 
     void OnThrottlePressed(GameObject go, bool state)
     {
-        if (state)
-        {
-            m_fThrottleValue = 1;
-        }
-        else
-            m_fThrottleValue = 0;
+        gameObject.SendMessage("FirePower", "Missile", SendMessageOptions.DontRequireReceiver);
     }
 
     void OnBreakPressed(GameObject go, bool state)
