@@ -4,6 +4,7 @@ using System.Collections;
 public class NewCarSelectMenu : MonoBehaviour {
 
     // to move camera to next car
+    public UILabel carLevel;
     public int numberOfCars = 3;
     private int maxPos;
     private int minPos;
@@ -42,6 +43,7 @@ public class NewCarSelectMenu : MonoBehaviour {
     public TweenPosition stickerButtons;
     public TweenPosition purchaseSticker2;
     public Light sun;
+    public TweenPosition statsTween;
 
 
     /// for touch interactions
@@ -65,6 +67,11 @@ public class NewCarSelectMenu : MonoBehaviour {
     public int slot1Perk;
     public int slot2Perk;
     public int slot3Perk;
+
+
+    // camera stufff
+    public bool isCameraOn = false;
+    public TweenPosition perkButtonTween;
 
 
 	// Use this for initialization
@@ -122,8 +129,9 @@ public class NewCarSelectMenu : MonoBehaviour {
             {
                 transform.position = Vector3.Lerp(transform.position, new Vector3((i - 1) * 10, transform.position.y, transform.position.z), 5.0f * Time.deltaTime);
                 
-                
                 int temp = i - 1;
+                carLevel.text = "Car Level " + cars[temp].GetComponent<CarProperties>().carLevel;
+               
                 if (cars[temp].GetComponent<CarProperties>().sticker2Unlocked == true)
                 {
                     purchaseSticker2.Play(false);
@@ -451,26 +459,56 @@ public class NewCarSelectMenu : MonoBehaviour {
         }
     }
 
+    void OnCamera()
+    {
+        if (isCameraOn == false)
+        {
+            statsTween.Play(true);
+            isCameraOn = true;
+            perkButtonTween.Play(true);
+        }
+        else if (isCameraOn == true)
+        {
+            statsTween.Play(false);
+            isCameraOn = false;
+            perkButtonTween.Play(false);
+        }
+    }
+
 
     void MoveCamera()
     {
 
         if (Input.GetButtonDown("Fire1"))
         {
+            
             startPos = Input.mousePosition;
+            
+        }
+        if (Input.GetButton("Fire1"))
+        {
+            if (isCameraOn == true)
+            {
+                cars[currentCarNumber - 1].GetComponent<Automate>().enabled = false;
+                Vector2 tempSwipeDist = new Vector2((Input.mousePosition.x - startPos.x), 0);
+                cars[currentCarNumber - 1].transform.Rotate(new Vector3(0.0f, -tempSwipeDist.x * Time.deltaTime, 0.0f));
+            }
+            
         }
 
         if (Input.GetButtonUp("Fire1"))
         {
+            cars[currentCarNumber - 1].GetComponent<Automate>().enabled = true;
             //swipeDist = (new Vector2(0, touch.position.y, 0) - new Vector3(0, startPos.y, 0)).magnitude;
             swipeDist = new Vector2( (Input.mousePosition.x - startPos.x), 0);
             //swipeDistx = new Vector2((touch.position.x - startPos.x), 0);
             // avgDistance = Mathf.Sqrt((swipeDist*swipeDist) + (swipeDistx*swipeDistx));
             Debug.Log(swipeDist.x);
+           //cars[currentCarNumber-1].transform.Rotate(new Vector3(0.0f, swipeDist.x * Time.deltaTime, 0.0f));
             //float avgDistY = touch.position.y - startPos.y;
             if (swipeDist.x < -50)
             {
-                if (isSelectingPerk == false)
+                if (isSelectingPerk == false && isCameraOn == false)
                 {
                     if (currentCarNumber < numberOfCars)
                     {
@@ -481,7 +519,7 @@ public class NewCarSelectMenu : MonoBehaviour {
             }
             else if (swipeDist.x > 50)
             {
-                if (isSelectingPerk == false)
+                if (isSelectingPerk == false && isCameraOn == false)
                 {
                     if (currentCarNumber > 1)
                     {
