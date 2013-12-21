@@ -110,12 +110,7 @@ public class InputManager : MonoBehaviour
 
     void OnBreakPressed(GameObject go, bool state)
     {
-      
-    }
-
-    void OnSliderChange()
-    {
-        
+        SendMessage("NitroBoost");
     }
 
     void OnSteeringPress(GameObject go, bool state)

@@ -45,7 +45,7 @@ public class CarControl : CarMechanicsBase
 
 
     void NitroBoost()
-    {
+    { 
         m_fCurrentEngineTorque = m_fNormalEngineTorque + m_fAdditionalNitroTorque;
         m_fSaveTime = Time.time;
         InvokeRepeating("NitroCooldown", m_CarStats.m_NitroPayload, Time.deltaTime);
