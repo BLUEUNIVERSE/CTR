@@ -27,7 +27,9 @@ public class CarMechanicsBase : MonoBehaviour
     // using the defined Max and Min Engine RPM, the script can determine what gear the
     // car needs to be in.
 
-    public float m_fEngineTorque = 600.0f;
+    public float m_fCurrentEngineTorque = 600.0f;
+    public float m_fNormalEngineTorque = 600.0f;
+    public float m_fAdditionalNitroTorque = 200.0f;
     public float m_fMaxEngineRPM = 3000.0f;
     public float m_fMinEngineRPM = 1000.0f;
     protected float m_fEngineRPM = 0.0f;
@@ -49,7 +51,7 @@ public class CarMechanicsBase : MonoBehaviour
         // Compute the engine RPM based on the average RPM of the two wheels, then call the shift gear void
         m_fEngineRPM = (m_FrontLeftWheel.rpm + m_FrontRightWheel.rpm) / 2 * m_aGearRatio[m_iCurrentGear];
 
-        ShiftGears();
+        //ShiftGears();
 
         // set the audio pitch to the percentage of RPM to the maximum RPM plus one, this makes the sound play
         // up to twice it's pitch, where it will suddenly drop when it switches gears.
@@ -63,8 +65,8 @@ public class CarMechanicsBase : MonoBehaviour
         {
             // finally, apply the values to the wheels.	The torque applied is divided by the current gear, and
             // multiplied by the user input variable.
-            m_FrontLeftWheel.motorTorque = m_fEngineTorque/m_aGearRatio[m_iCurrentGear] * input.y;
-            m_FrontRightWheel.motorTorque = m_fEngineTorque/m_aGearRatio[m_iCurrentGear] * input.y;
+            m_FrontLeftWheel.motorTorque = m_fCurrentEngineTorque * input.y;
+            m_FrontRightWheel.motorTorque = m_fCurrentEngineTorque * input.y;
         }
 
         // the steer angle is an arbitrary value multiplied by the user input.
@@ -73,9 +75,7 @@ public class CarMechanicsBase : MonoBehaviour
 
         m_FronLeftWheelTransform.localEulerAngles = Vector3.up * m_fMaxWheelTurnAngle * input.x * Time.deltaTime;
         m_FrontRightWheelTransform.localEulerAngles = Vector3.up * m_fMaxWheelTurnAngle * input.x * Time.deltaTime;
-
-        
-             
+     
     }
 
     void ShiftGears()
@@ -111,5 +111,7 @@ public class CarMechanicsBase : MonoBehaviour
             m_iCurrentGear = m_iAppropriateGear;
         }
     }
+
+    
 
 }

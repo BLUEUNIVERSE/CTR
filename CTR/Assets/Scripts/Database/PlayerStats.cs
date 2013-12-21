@@ -1,4 +1,4 @@
-﻿
+﻿using System;
 using System.Collections;
 
 public class PlayerStats
@@ -8,11 +8,12 @@ public class PlayerStats
     string m_LastSelectedCar;
     int m_iTotalNoStars;
 }
-
+[Serializable]
 public class CarStats
 {
-    int   m_iCurrentCarLevel;
-    float m_fHandling;
-    float m_fAcceleration;
-    float m_fTopSpeed;
+  public int   m_iCurrentCarLevel;
+  public float m_fHandling;
+  public float m_fAcceleration;
+  public float m_fTopSpeed;
+  public float m_NitroPayload;
 }

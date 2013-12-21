@@ -7,7 +7,7 @@ public class PowerLauncher : MonoBehaviour
 {
 
     public List<Power> m_PowersList;
-
+    public GameObject m_Parent;
     public Transform m_SpawnPoint;
 	
 
@@ -22,6 +22,10 @@ public class PowerLauncher : MonoBehaviour
             {
                 if(power.m_Type == PowerType.Projectile)
                     Throwable(power.gameObject);
+                if (power.m_Type == PowerType.Advantage)
+                {
+
+                }
             }
         }
     }
@@ -30,5 +34,10 @@ public class PowerLauncher : MonoBehaviour
     void Throwable(GameObject go)
     {
          GameObject instance =  Instantiate(go, m_SpawnPoint.position, m_SpawnPoint.rotation) as GameObject;
+    }
+
+    void Advantage()
+    {
+        
     }
 }

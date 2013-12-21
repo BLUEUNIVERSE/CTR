@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2012 Tasharen Entertainment
+// Copyright © 2011-2013 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -61,7 +61,7 @@ public class UITable : MonoBehaviour
 				{
 					Transform child = myTrans.GetChild(i);
 
-					if (child && (!hideInactive || NGUITools.GetActive(child.gameObject))) mChildren.Add(child);
+					if (child && child.gameObject && (!hideInactive || NGUITools.GetActive(child.gameObject))) mChildren.Add(child);
 				}
 				if (sorted) mChildren.Sort(SortByName);
 			}

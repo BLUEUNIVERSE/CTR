@@ -95,19 +95,8 @@ public class InputManager : MonoBehaviour
         }
         if (m_bUseKeyboardControls)
         {
-            if (Input.GetKey(KeyCode.UpArrow))
-            {
-                m_fThrottleValue = 1;
-            }
-            else if (Input.GetKey(KeyCode.DownArrow))
-            {
-                m_fThrottleValue = -1;
-            }
-            else
-            {
-                m_fThrottleValue = 0;
-            }
 
+            m_fThrottleValue = Input.GetAxis("Vertical");
             m_fInputValueToPass = Input.GetAxis("Horizontal");
             
         }
@@ -121,13 +110,7 @@ public class InputManager : MonoBehaviour
 
     void OnBreakPressed(GameObject go, bool state)
     {
-        m_bBrakPressed = state;
-        m_fThrottleValue = -1;
-    }
-
-    void OnSliderChange()
-    {
-        
+        SendMessage("NitroBoost");
     }
 
     void OnSteeringPress(GameObject go, bool state)
