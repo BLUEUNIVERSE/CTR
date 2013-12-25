@@ -3,8 +3,11 @@ using System.Collections;
 
 public class Automate : MonoBehaviour {
 
+    public bool isSplashScreen = false;
     public bool AutoRotate = false;
     public float roationSpeed = 10f;
+    public bool AutoDestruct = false;
+    public float destroyTime;
 
     public bool mainMenuRotate = false;
 
@@ -31,6 +34,17 @@ public class Automate : MonoBehaviour {
         if (AutoRotate)
         {
             gameObject.transform.Rotate(new Vector3(0.0f, roationSpeed * Time.deltaTime, 0.0f));
+        }
+
+        if (isSplashScreen)
+        {
+            if(Time.timeSinceLevelLoad > 7)
+            Application.LoadLevel("Main Menu Scene");
+        }
+
+        if (AutoDestruct)
+        {
+            Destroy(gameObject, destroyTime);
         }
 
         //if (mainMenuRotate)

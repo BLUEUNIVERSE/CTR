@@ -19,7 +19,7 @@
 	<DebugType>full</DebugType>
 	<Optimize>false</Optimize>
 	<OutputPath>Temp\bin\Debug\</OutputPath>
-	<DefineConstants>DEBUG;TRACE;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_AUDIO_FMOD;ENABLE_MONO;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_GENERICS;ENABLE_SUBSTANCE;INCLUDE_WP8SUPPORT;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;UNITY_ANDROID_API;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;UNITY_4_3_1;UNITY_4_3;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN</DefineConstants>
+	<DefineConstants>DEBUG;TRACE;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_AUDIO_FMOD;ENABLE_MONO;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_GENERICS;ENABLE_SUBSTANCE;INCLUDE_WP8SUPPORT;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;UNITY_ANDROID_API;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;UNITY_4_3_0;UNITY_4_3;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN</DefineConstants>
 	<ErrorReport>prompt</ErrorReport>
 	<WarningLevel>4</WarningLevel>
 	<NoWarn>0169</NoWarn>
@@ -46,6 +46,35 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\AIDriverToolkit\Example Scene\Scripts\ColliderFriction.cs" />
+     <Compile Include="Assets\AIDriverToolkit\Example Scene\Scripts\DrivingSpeed.cs" />
+     <Compile Include="Assets\AIDriverToolkit\Example Scene\Scripts\NewDriving.cs" />
+     <Compile Include="Assets\AIDriverToolkit\Example Scene\Scripts\TriggerSound.cs" />
+     <Compile Include="Assets\AIDriverToolkit\Scripts\AIDriver.cs" />
+     <Compile Include="Assets\AIDriverToolkit\Scripts\AIDriverController.cs" />
+     <Compile Include="Assets\AIDriverToolkit\Scripts\AIDriverMotor.cs" />
+     <Compile Include="Assets\AIDriverToolkit\Scripts\AIEventArgs.cs" />
+     <Compile Include="Assets\AIDriverToolkit\Scripts\AIMotorMapping.cs" />
+     <Compile Include="Assets\AIDriverToolkit\Scripts\AIRespawn.cs" />
+     <Compile Include="Assets\AIDriverToolkit\Scripts\AIRespawnController.cs" />
+     <Compile Include="Assets\AIDriverToolkit\Scripts\AIWaypoint.cs" />
+     <Compile Include="Assets\AIDriverToolkit\Scripts\AIWaypointEditor.cs" />
+     <Compile Include="Assets\AIDriverToolkit\Scripts\BarrierBehaviour.cs" />
+     <Compile Include="Assets\AIDriverToolkit\Scripts\DrawLineToNext.cs" />
+     <Compile Include="Assets\AIDriverToolkit\Scripts\EventListenerExample.cs" />
+     <Compile Include="Assets\AIDriverToolkit\Scripts\Interpolate.cs" />
+     <Compile Include="Assets\AIDriverToolkit\Scripts\LevelSpawner.cs" />
+     <Compile Include="Assets\AIDriverToolkit\Scripts\NewWheelPosition.cs" />
+     <Compile Include="Assets\AIDriverToolkit\Scripts\SetStartPosition.cs" />
+     <Compile Include="Assets\AIDriverToolkit\Scripts\SetWheelColliderSettings.cs" />
+     <Compile Include="Assets\AIDriverToolkit\Scripts\ShowControllerRaycasts.cs" />
+     <Compile Include="Assets\AIDriverToolkit\Scripts\ShowRaycasts.cs" />
+     <Compile Include="Assets\AIDriverToolkit\Scripts\ShowWayLines.cs" />
+     <Compile Include="Assets\AIDriverToolkit\Scripts\SplineCalculation.cs" />
+     <Compile Include="Assets\AIDriverToolkit\Scripts\SplinePath.cs" />
+     <Compile Include="Assets\AIDriverToolkit\Scripts\SplinePathWaypoints.cs" />
+     <Compile Include="Assets\AIDriverToolkit\Scripts\SwitchOAMode.cs" />
+     <Compile Include="Assets\AIDriverToolkit\Scripts\ViewPointBehaviour.cs" />
      <Compile Include="Assets\IGSoft_Resources\Scripts\NcEffect\Common\EffectScriptSample.cs" />
      <Compile Include="Assets\IGSoft_Resources\Scripts\NcEffect\Common\NcDetachObject.cs" />
      <Compile Include="Assets\IGSoft_Resources\Scripts\NcEffect\Common\NcDisableDelayActive.cs" />
@@ -256,7 +285,6 @@
      <Compile Include="Assets\Scripts\AdvancedCSharpMessenger\SaveParameters.cs" />
      <Compile Include="Assets\Scripts\AdvancedCSharpMessenger\SimpleJson.cs" />
      <Compile Include="Assets\Scripts\AdvancedCSharpMessenger\Util.cs" />
-     <Compile Include="Assets\Scripts\CameraScripts\SmoothFollow.cs" />
      <Compile Include="Assets\Scripts\Database\PlayerStats.cs" />
      <Compile Include="Assets\Scripts\GamplayScripts\Controllers\AIPlayer.cs" />
      <Compile Include="Assets\Scripts\GamplayScripts\Controllers\CarControl.cs" />
@@ -267,13 +295,18 @@
      <Compile Include="Assets\Scripts\GamplayScripts\Powers\DamageManager.cs" />
      <Compile Include="Assets\Scripts\GamplayScripts\Powers\Missile.cs" />
      <Compile Include="Assets\Scripts\GamplayScripts\Powers\Power.cs" />
+     <Compile Include="Assets\Scripts\GamplayScripts\Powers\PowerSpawn.cs" />
      <Compile Include="Assets\Scripts\Managers\GlobalHitManager.cs" />
      <Compile Include="Assets\Scripts\UI Interface\Automate.cs" />
      <Compile Include="Assets\Scripts\UI Interface\CarProperties.cs" />
+     <Compile Include="Assets\Scripts\UI Interface\CarScript2.cs" />
      <Compile Include="Assets\Scripts\UI Interface\CarSelectMenu.cs" />
      <Compile Include="Assets\Scripts\UI Interface\FacebookManager.cs" />
+     <Compile Include="Assets\Scripts\UI Interface\InGameCarUI.cs" />
+     <Compile Include="Assets\Scripts\UI Interface\InGameUI.cs" />
      <Compile Include="Assets\Scripts\UI Interface\MainMenu.cs" />
      <Compile Include="Assets\Scripts\UI Interface\NewCarSelectMenu.cs" />
+     <Compile Include="Assets\Scripts\UI Interface\PauseMenu.cs" />
      <Compile Include="Assets\Scripts\UI Interface\SelectLevelMenu.cs" />
      <None Include="Assets\NGUI\Resources\Shaders\Unlit - Depth Cutout.shader" />
      <None Include="Assets\Standard Assets\Projectors\Guidelines.txt" />

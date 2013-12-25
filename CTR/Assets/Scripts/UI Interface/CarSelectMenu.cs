@@ -64,6 +64,7 @@ public class CarSelectMenu : MonoBehaviour {
     private float minSwipeDistance = 10;
 	// Use this for initialization
 	void Start () {
+	    Time.timeScale = 1.0f;
 
 	}
 	
@@ -315,7 +316,7 @@ public class CarSelectMenu : MonoBehaviour {
 
     void OnRace()
     {
-        Application.LoadLevel("TestScene");
+        Application.LoadLevel("In game UI");
     }
 
     void OnMenu()

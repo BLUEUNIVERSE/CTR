@@ -118,12 +118,12 @@ public class InputManager : MonoBehaviour
   
     }
 
-    void OnGUI()
-    {
-        string str = string.Format("InputValue : {0} Velocity Magniude : {1} and Ve: {2}", m_fInputValueToPass, rigidbody.velocity.magnitude, m_vFinalTouchPosition);
-        string value = string.Format("Acceleration : {0} ", Input.acceleration);
-        GUI.Button(new Rect(5, 5, 1024, 50), str);
-        GUI.Button(new Rect(5, 55, 1024, 50), value);
-    }
+    //void OnGUI()
+    //{
+    //    string str = string.Format("InputValue : {0} Velocity Magniude : {1} and Ve: {2}", m_fInputValueToPass, rigidbody.velocity.magnitude, m_vFinalTouchPosition);
+    //    string value = string.Format("Acceleration : {0} ", Input.acceleration);
+    //    GUI.Button(new Rect(5, 5, 1024, 50), str);
+    //    GUI.Button(new Rect(5, 55, 1024, 50), value);
+    //}
 
 }

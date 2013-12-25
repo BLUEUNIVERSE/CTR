@@ -10,7 +10,6 @@ public class NewCarSelectMenu : MonoBehaviour {
     private int minPos;
     private int currentCarNumber = 1;
     public GameObject spawnParticles;
-    private GameObject spawnParticlesPrefab;
     public Transform spawnParticlesPoint;
 
     // info about coins and costs for cars
@@ -21,6 +20,10 @@ public class NewCarSelectMenu : MonoBehaviour {
 
     // array of cars
     public GameObject[] cars;
+    //public GameObject tempCar;
+    public CarProperties tempCarProperties;
+    int oldvalue = 0;
+    int newValue = 0;
 
 
     // graphics stats for cars
@@ -74,6 +77,13 @@ public class NewCarSelectMenu : MonoBehaviour {
     public TweenPosition perkButtonTween;
 
 
+    // power slots
+    public Transform slot1;
+    public Transform slot2;
+    public Transform slot3;
+
+
+
 	// Use this for initialization
 	void Start () {
 
@@ -89,6 +99,7 @@ public class NewCarSelectMenu : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+
         if (Input.touchCount > 0)
         {
             Touch touch = Input.touches[0];
@@ -96,6 +107,26 @@ public class NewCarSelectMenu : MonoBehaviour {
             if (touch.phase == TouchPhase.Began)
             {
                 startPos = touch.position;
+            }
+            if (touch.phase == TouchPhase.Moved)
+            {
+                if (isCameraOn == true)
+                {
+                    cars[currentCarNumber - 1].GetComponent<Automate>().enabled = false;
+                    Vector2 tempSwipeDist = new Vector2((Input.mousePosition.x - startPos.x), 0);
+                    
+                        if (tempSwipeDist.x > 100)
+                        {
+                            tempSwipeDist.x = 100;
+                        }
+                        else if (tempSwipeDist.x < -100)
+                        {
+                            tempSwipeDist.x = -100;
+                        }
+
+                    cars[currentCarNumber - 1].transform.Rotate(new Vector3(0.0f, -tempSwipeDist.x * Time.deltaTime, 0.0f));
+                }
+
             }
 
             if (touch.phase == TouchPhase.Ended)
@@ -106,17 +137,20 @@ public class NewCarSelectMenu : MonoBehaviour {
                 // avgDistance = Mathf.Sqrt((swipeDist*swipeDist) + (swipeDistx*swipeDistx));
                 //float avgDistY = touch.position.y - startPos.y;
 
-                if (swipeDistx.x > (Screen.height / 5))
+                if (isSelectingPerk == false && isCameraOn == false)
                 {
-                    if (currentCarNumber < numberOfCars)
-                        currentCarNumber++;
-                }
-                else if (swipeDistx.x < -(Screen.height / 5))
-                {
-                    if (currentCarNumber > 1)
+                    if (swipeDistx.x > (Screen.height / 5))
                     {
-                        //spawnParticlesPrefab = (GameObject)Instantiate(spawnParticles, spawnParticlesPoint.position, spawnParticlesPoint.rotation);
-                        currentCarNumber--;
+                        if (currentCarNumber < numberOfCars)
+                            currentCarNumber++;
+                    }
+                    else if (swipeDistx.x < -(Screen.height / 5))
+                    {
+                        if (currentCarNumber > 1)
+                        {
+                            //spawnParticlesPrefab = (GameObject)Instantiate(spawnParticles, spawnParticlesPoint.position, spawnParticlesPoint.rotation);
+                            currentCarNumber--;
+                        }
                     }
                 }
             }
@@ -130,155 +164,145 @@ public class NewCarSelectMenu : MonoBehaviour {
                 transform.position = Vector3.Lerp(transform.position, new Vector3((i - 1) * 10, transform.position.y, transform.position.z), 5.0f * Time.deltaTime);
                 
                 int temp = i - 1;
-                carLevel.text = "Car Level " + cars[temp].GetComponent<CarProperties>().carLevel;
-               
-                if (cars[temp].GetComponent<CarProperties>().sticker2Unlocked == true)
-                {
-                    purchaseSticker2.Play(false);
-                }
-                else
-                    purchaseSticker2.Play(true);
-
+                tempCarProperties = cars[temp].GetComponent<CarProperties>();
+                carLevel.text = "Car Level " + tempCarProperties.carLevel;
 
                 CheckCarPerk(temp);
-
-                if (cars[temp].GetComponent<CarProperties>().carLevel == 0) 
-               
+                
+                if(tempCarProperties.carLevel == 0)
                 {
+                    oldvalue = 0;
+                    newValue = 0;
+
                     upgradeButton.Play(true);
                     unlockButton.Play(false);
                     raceButton.Play(true);
                     purchaseSticker2.Play(false);
-                    stickerButtons.Play(false);
+                    stickerButtons.Play(true);
+
+                    slot1.localPosition = new Vector3(slot1.localPosition.x, slot1.localPosition.y, 2000);
+                    slot2.localPosition = new Vector3(slot2.localPosition.x, slot2.localPosition.y, 2000);
+                    slot3.localPosition = new Vector3(slot3.localPosition.x, slot3.localPosition.y, 2000);
+
                     sun.intensity = 0.2f;
-                   
-                    //perk1.enabled = false;
-                    //perk1.enabled = true;
                     upgradeCostLabel.text = "Unlock $" + cars[temp].GetComponent<CarProperties>().coinsToUnlock.ToString();
-                    newSpeed.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().speedLevels[0], newSpeed.foreground.localScale.y, newSpeed.foreground.localScale.z);
-                    speed.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().speedLevels[0], speed.foreground.localScale.y, speed.foreground.localScale.z);
-
-                    newAcc.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().accelerationLevels[0], newAcc.foreground.localScale.y, newAcc.foreground.localScale.z);
-                    acceleration.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().accelerationLevels[0], acceleration.foreground.localScale.y, acceleration.foreground.localScale.z);
-
-                    newHandling.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().handlingLevels[0], newHandling.foreground.localScale.y, newHandling.foreground.localScale.z);
-                    handling.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().handlingLevels[0], handling.foreground.localScale.y, handling.foreground.localScale.z);
-
-                    newNitro.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().nitroLevels[0], newNitro.foreground.localScale.y, newNitro.foreground.localScale.z);
-                    nitro.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().nitroLevels[0], nitro.foreground.localScale.y, nitro.foreground.localScale.z);
-
-                    newShield.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().ShieldLevels[0], newShield.foreground.localScale.y, newShield.foreground.localScale.z);
-                    shield.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().ShieldLevels[0], shield.foreground.localScale.y, shield.foreground.localScale.z);
                 }
-                else if (cars[temp].GetComponent<CarProperties>().carLevel == 1)
+                else if (tempCarProperties.carLevel == 1)
                 {
+                    oldvalue = 0;
+                    newValue = 1;
                     upgradeButton.Play(false);
                     unlockButton.Play(true);
-                    raceButton.Play(false);
-                    stickerButtons.Play(true);
+                    if (isCameraOn == true)
+                    {
+                        raceButton.Play(true);
+                        stickerButtons.Play(true);
+                    }
+                    else
+                    {
+                        raceButton.Play(false);
+                        stickerButtons.Play(false);
+                    }
+                    
                     sun.intensity = 8.0f;
-                   
-                   
-                    upgradeCostLabel.text = "Upgrade $" + cars[temp].GetComponent<CarProperties>().coinsToUpgradeLevel2.ToString();
-                    newSpeed.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().speedLevels[1], newSpeed.foreground.localScale.y, newSpeed.foreground.localScale.z);
-                    speed.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().speedLevels[0], speed.foreground.localScale.y, speed.foreground.localScale.z);
 
-                    newAcc.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().accelerationLevels[1], newAcc.foreground.localScale.y, newAcc.foreground.localScale.z);
-                    acceleration.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().accelerationLevels[0], acceleration.foreground.localScale.y, acceleration.foreground.localScale.z);
-
-                    newHandling.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().handlingLevels[1], newHandling.foreground.localScale.y, newHandling.foreground.localScale.z);
-                    handling.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().handlingLevels[0], handling.foreground.localScale.y, handling.foreground.localScale.z);
-
-                    newNitro.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().nitroLevels[1], newNitro.foreground.localScale.y, newNitro.foreground.localScale.z);
-                    nitro.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().nitroLevels[0], nitro.foreground.localScale.y, nitro.foreground.localScale.z);
-
-                    newShield.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().ShieldLevels[1], newShield.foreground.localScale.y, newShield.foreground.localScale.z);
-                    shield.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().ShieldLevels[0], shield.foreground.localScale.y, shield.foreground.localScale.z);
+                    slot1.localPosition = new Vector3(slot1.localPosition.x, slot1.localPosition.y, 0);
+                    slot2.localPosition = new Vector3(slot2.localPosition.x, slot2.localPosition.y, 2000);
+                    slot3.localPosition = new Vector3(slot3.localPosition.x, slot3.localPosition.y, 2000);
                 }
-                else if (cars[temp].GetComponent<CarProperties>().carLevel == 2)
+                else if (tempCarProperties.carLevel == 2)
                 {
-                    raceButton.Play(false);
-                    stickerButtons.Play(true);
+                    oldvalue = 1;
+                    newValue = 2;
+                    if (isCameraOn == true)
+                    {
+                        raceButton.Play(true);
+                        stickerButtons.Play(true);
+                    }
+                    else
+                    {
+                        raceButton.Play(false);
+                        stickerButtons.Play(false);
+                    }
+
+                    slot1.localPosition = new Vector3(slot1.localPosition.x, slot1.localPosition.y, 0);
+                    slot2.localPosition = new Vector3(slot2.localPosition.x, slot2.localPosition.y, 0);
+                    slot3.localPosition = new Vector3(slot3.localPosition.x, slot3.localPosition.y, 2000);
+
                     upgradeButton.Play(false);
                     sun.intensity = 8.0f;
-                    upgradeCostLabel.text = "Upgrade $" + cars[temp].GetComponent<CarProperties>().coinsToUpgradeLevel3.ToString();
-                    newSpeed.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().speedLevels[2], newSpeed.foreground.localScale.y, newSpeed.foreground.localScale.z);
-                    speed.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().speedLevels[1], speed.foreground.localScale.y, speed.foreground.localScale.z);
-
-                    newAcc.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().accelerationLevels[2], newAcc.foreground.localScale.y, newAcc.foreground.localScale.z);
-                    acceleration.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().accelerationLevels[1], acceleration.foreground.localScale.y, acceleration.foreground.localScale.z);
-
-                    newHandling.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().handlingLevels[2], newHandling.foreground.localScale.y, newHandling.foreground.localScale.z);
-                    handling.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().handlingLevels[1], handling.foreground.localScale.y, handling.foreground.localScale.z);
-
-                    newNitro.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().nitroLevels[2], newNitro.foreground.localScale.y, newNitro.foreground.localScale.z);
-                    nitro.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().nitroLevels[1], nitro.foreground.localScale.y, nitro.foreground.localScale.z);
-
-                    newShield.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().ShieldLevels[2], newShield.foreground.localScale.y, newShield.foreground.localScale.z);
-                    shield.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().ShieldLevels[1], shield.foreground.localScale.y, shield.foreground.localScale.z);
                 }
-                else if (cars[temp].GetComponent<CarProperties>().carLevel == 3)
+                else if (tempCarProperties.carLevel == 3)
                 {
+                    oldvalue = 2;
+                    newValue = 2;
                     upgradeButton.Play(true);
                     unlockButton.Play(true);
-                    raceButton.Play(false);
-                    stickerButtons.Play(true);
+                    if (isCameraOn == true)
+                    {
+                        raceButton.Play(true);
+                        stickerButtons.Play(true);
+                    }
+                    else
+                    {
+                        raceButton.Play(false);
+                        stickerButtons.Play(false);
+                    }
+
+                    slot1.localPosition = new Vector3(slot1.localPosition.x, slot1.localPosition.y, 0);
+                    slot2.localPosition = new Vector3(slot2.localPosition.x, slot2.localPosition.y, 0);
+                    slot3.localPosition = new Vector3(slot3.localPosition.x, slot3.localPosition.y, 0);
+                    
                     sun.intensity = 8.0f;
                     upgradeCostLabel.text = "MAX LEVEL";
-                    newSpeed.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().speedLevels[2], newSpeed.foreground.localScale.y, newSpeed.foreground.localScale.z);
-                    speed.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().speedLevels[2], speed.foreground.localScale.y, speed.foreground.localScale.z);
-
-                    newAcc.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().accelerationLevels[2], newAcc.foreground.localScale.y, newAcc.foreground.localScale.z);
-                    acceleration.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().accelerationLevels[2], acceleration.foreground.localScale.y, acceleration.foreground.localScale.z);
-
-                    newHandling.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().handlingLevels[2], newHandling.foreground.localScale.y, newHandling.foreground.localScale.z);
-                    handling.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().handlingLevels[2], handling.foreground.localScale.y, handling.foreground.localScale.z);
-
-                    newNitro.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().nitroLevels[2], newNitro.foreground.localScale.y, newNitro.foreground.localScale.z);
-                    nitro.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().nitroLevels[2], nitro.foreground.localScale.y, nitro.foreground.localScale.z);
-
-                    newShield.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().ShieldLevels[2], newShield.foreground.localScale.y, newShield.foreground.localScale.z);
-                    shield.foreground.localScale = new Vector3(cars[temp].GetComponent<CarProperties>().ShieldLevels[2], shield.foreground.localScale.y, shield.foreground.localScale.z);
                 }
+
+                newSpeed.foreground.localScale = new Vector3(tempCarProperties.speedLevels[newValue], newSpeed.foreground.localScale.y, newSpeed.foreground.localScale.z);
+                speed.foreground.localScale = new Vector3(tempCarProperties.speedLevels[oldvalue], speed.foreground.localScale.y, speed.foreground.localScale.z);
+
+                newAcc.foreground.localScale = new Vector3(tempCarProperties.accelerationLevels[newValue], newAcc.foreground.localScale.y, newAcc.foreground.localScale.z);
+                acceleration.foreground.localScale = new Vector3(tempCarProperties.accelerationLevels[oldvalue], acceleration.foreground.localScale.y, acceleration.foreground.localScale.z);
+
+                newHandling.foreground.localScale = new Vector3(tempCarProperties.handlingLevels[newValue], newHandling.foreground.localScale.y, newHandling.foreground.localScale.z);
+                handling.foreground.localScale = new Vector3(tempCarProperties.handlingLevels[oldvalue], handling.foreground.localScale.y, handling.foreground.localScale.z);
+
+                newShield.foreground.localScale = new Vector3(tempCarProperties.ShieldLevels[newValue], newShield.foreground.localScale.y, newShield.foreground.localScale.z);
+                shield.foreground.localScale = new Vector3(tempCarProperties.ShieldLevels[oldvalue], shield.foreground.localScale.y, shield.foreground.localScale.z);
             }
         }
 	}
 
     void OnUpgrade()
     {
-
-        
-            if (cars[currentCarNumber - 1].GetComponent<CarProperties>().carLevel == 1 && totalCoins >=  cars[currentCarNumber - 1].GetComponent<CarProperties>().coinsToUpgradeLevel2)
+        if (tempCarProperties.carLevel == 1 && totalCoins >= tempCarProperties.coinsToUpgradeLevel2)
             {
-                cars[currentCarNumber - 1].GetComponent<CarProperties>().carLevel++;
-                totalCoins -= cars[currentCarNumber - 1].GetComponent<CarProperties>().coinsToUpgradeLevel2;
+                tempCarProperties.carLevel++;
+                totalCoins -= tempCarProperties.coinsToUpgradeLevel2;
                 totalCoinsLabel.text = totalCoins.ToString();
-                spawnParticlesPrefab = (GameObject)Instantiate(spawnParticles, spawnParticlesPoint.position, spawnParticlesPoint.rotation);
+                Instantiate(spawnParticles, spawnParticlesPoint.position, spawnParticlesPoint.rotation);
             }
-            else if (cars[currentCarNumber - 1].GetComponent<CarProperties>().carLevel == 2 && totalCoins >=  cars[currentCarNumber - 1].GetComponent<CarProperties>().coinsToUpgradeLevel3)
+        else if (tempCarProperties.carLevel == 2 && totalCoins >= tempCarProperties.coinsToUpgradeLevel3)
             {
-                cars[currentCarNumber - 1].GetComponent<CarProperties>().carLevel++;
-                totalCoins -= cars[currentCarNumber - 1].GetComponent<CarProperties>().coinsToUpgradeLevel3;
+                tempCarProperties.carLevel++;
+                totalCoins -= tempCarProperties.coinsToUpgradeLevel3;
                 totalCoinsLabel.text = totalCoins.ToString();
-                spawnParticlesPrefab = (GameObject)Instantiate(spawnParticles, spawnParticlesPoint.position, spawnParticlesPoint.rotation);
+                Instantiate(spawnParticles, spawnParticlesPoint.position, spawnParticlesPoint.rotation);
             }
-            Debug.Log(cars[currentCarNumber - 1].GetComponent<CarProperties>().carLevel);
-        
+       // Debug.Log(tempCarProperties.carLevel);
     }
 
     void OnPurchase()
     {
-
-        if (totalCoins >= cars[currentCarNumber - 1].GetComponent<CarProperties>().coinsToUnlock)
+        if (totalCoins >= tempCarProperties.coinsToUnlock)
         {
-            spawnParticlesPrefab = (GameObject)Instantiate(spawnParticles, spawnParticlesPoint.position, spawnParticlesPoint.rotation);
-            cars[currentCarNumber - 1].GetComponent<CarProperties>().carLevel++;
-            totalCoins -= cars[currentCarNumber - 1].GetComponent<CarProperties>().coinsToUnlock;
+            Instantiate(spawnParticles, spawnParticlesPoint.position, spawnParticlesPoint.rotation);
+            tempCarProperties.carLevel++;
+            totalCoins -= tempCarProperties.coinsToUnlock;
             totalCoinsLabel.text = totalCoins.ToString();
             //cars[currentCarNumber - 1].GetComponent<CarProperties>().currentSticker = cars[currentCarNumber - 1].GetComponent<CarProperties>().stickers[0];
             //cars[currentCarNumber - 1].renderer.material.mainTexture = cars[currentCarNumber - 1].GetComponent<CarProperties>().currentSticker;
         }
-            Debug.Log(cars[currentCarNumber - 1].GetComponent<CarProperties>().carLevel);
+            //Debug.Log(cars[currentCarNumber - 1].GetComponent<CarProperties>().carLevel);
        
         
     }
@@ -286,51 +310,11 @@ public class NewCarSelectMenu : MonoBehaviour {
     void OnRace()
     {
 
-        if (cars[currentCarNumber - 1].GetComponent<CarProperties>().sticker2Unlocked == false)
-            cars[currentCarNumber - 1].GetComponent<CarProperties>().currentSticker = cars[currentCarNumber - 1].GetComponent<CarProperties>().stickers[0];
-           
+        //if (tempCarProperties.sticker2Unlocked == false)
+        //    tempCarProperties.currentSticker = cars[currentCarNumber - 1].GetComponent<CarProperties>().stickers[0];
 
-        if (cars[currentCarNumber-1].GetComponent<CarProperties>().carLevel > 0)
-        Application.LoadLevel("TestScene");
-        
-
-    }
-
-    void OnSticker1()
-    {
-        if (cars[currentCarNumber - 1].GetComponent<CarProperties>().carLevel == 1)
-        {
-            cars[currentCarNumber - 1].renderer.material.mainTexture = cars[0].GetComponent<CarProperties>().stickers[0];
-
-            //if (cars[currentCarNumber - 1].GetComponent<CarProperties>().sticker1Unlocked == true)
-            //    cars[currentCarNumber - 1].GetComponent<CarProperties>().currentSticker = cars[currentCarNumber - 1].GetComponent<CarProperties>().stickers[0];
-
-        }
-    }
-    void OnSticker2()
-    {
-        if (cars[currentCarNumber - 1].GetComponent<CarProperties>().carLevel > 0)
-        {
-            cars[currentCarNumber - 1].renderer.material.mainTexture = cars[0].GetComponent<CarProperties>().stickers[1];
-
-            if (cars[currentCarNumber - 1].GetComponent<CarProperties>().sticker2Unlocked == true)
-            {
-                cars[currentCarNumber - 1].GetComponent<CarProperties>().currentSticker = cars[currentCarNumber - 1].GetComponent<CarProperties>().stickers[1];
-                raceButton.Play(false);
-            }
-        }
-    }
-
-    void OnPurchaseSticker2()
-    {
-        if(totalCoins > cars[currentCarNumber - 1].GetComponent<CarProperties>().coinsForSticker2)
-        {
-            totalCoins -= cars[currentCarNumber - 1].GetComponent<CarProperties>().coinsForSticker2;
-            cars[currentCarNumber - 1].GetComponent<CarProperties>().sticker2Unlocked = true;
-            totalCoinsLabel.text = totalCoins.ToString();
-            raceButton.Play(true);
-
-        }
+        if (tempCarProperties.carLevel > 0)
+            Application.LoadLevel("In game UI");
     }
 
     void OnPerk1()
@@ -366,9 +350,9 @@ public class NewCarSelectMenu : MonoBehaviour {
             perk1.normalSprite = "exit button";
             perk1.hoverSprite = "exit button";
             perk1.pressedSprite = "exit button";
-            cars[currentCarNumber - 1].GetComponent<CarProperties>().perk1 = 1;
-            perk1.enabled = false;
-            perk1.enabled = true;
+            tempCarProperties.perk1 = 1;
+            //perk1.enabled = false;
+            //perk1.enabled = true;
 
             print("slot 1 perk = energy");
         }
@@ -378,7 +362,7 @@ public class NewCarSelectMenu : MonoBehaviour {
             perk2.normalSprite = "exit button";
             perk2.hoverSprite = "exit button";
             perk2.pressedSprite = "exit button";
-            cars[currentCarNumber - 1].GetComponent<CarProperties>().perk2 = 1;
+            tempCarProperties.perk2 = 1;
 
             print("slot 2 perk = energy");
         }
@@ -389,7 +373,7 @@ public class NewCarSelectMenu : MonoBehaviour {
             perk3.hoverSprite = "exit button";
             perk3.pressedSprite = "exit button";
 
-            cars[currentCarNumber - 1].GetComponent<CarProperties>().perk3 = 1;
+            tempCarProperties.perk3 = 1;
             print("slot 3 perk = energy");
         }
 
@@ -403,9 +387,9 @@ public class NewCarSelectMenu : MonoBehaviour {
             perk1.normalSprite = "exit button";
             perk1.hoverSprite = "exit button";
             perk1.pressedSprite = "exit button";
-            cars[currentCarNumber - 1].GetComponent<CarProperties>().perk1 = 2;
-            perk1.enabled = false;
-            perk1.enabled = true;
+            tempCarProperties.perk1 = 2;
+            //perk1.enabled = false;
+            //perk1.enabled = true;
 
             print("slot 1 perk = energy");
         }
@@ -415,7 +399,7 @@ public class NewCarSelectMenu : MonoBehaviour {
             perk2.normalSprite = "exit button";
             perk2.hoverSprite = "exit button";
             perk2.pressedSprite = "exit button";
-            cars[currentCarNumber - 1].GetComponent<CarProperties>().perk2 = 2;
+            tempCarProperties.perk2 = 2;
 
             print("slot 2 perk = energy");
         }
@@ -426,7 +410,7 @@ public class NewCarSelectMenu : MonoBehaviour {
             perk3.hoverSprite = "exit button";
             perk3.pressedSprite = "exit button";
 
-            cars[currentCarNumber - 1].GetComponent<CarProperties>().perk3 = 2;
+            tempCarProperties.perk3 = 2;
             print("slot 3 perk = energy");
         }
     }
@@ -465,13 +449,11 @@ public class NewCarSelectMenu : MonoBehaviour {
         {
             statsTween.Play(true);
             isCameraOn = true;
-            perkButtonTween.Play(true);
         }
         else if (isCameraOn == true)
         {
             statsTween.Play(false);
             isCameraOn = false;
-            perkButtonTween.Play(false);
         }
     }
 
@@ -491,6 +473,16 @@ public class NewCarSelectMenu : MonoBehaviour {
             {
                 cars[currentCarNumber - 1].GetComponent<Automate>().enabled = false;
                 Vector2 tempSwipeDist = new Vector2((Input.mousePosition.x - startPos.x), 0);
+
+                if (tempSwipeDist.x > 100)
+                {
+                    tempSwipeDist.x = 100;
+                }
+                else if (tempSwipeDist.x < -100)
+                {
+                    tempSwipeDist.x = -100;
+                }
+
                 cars[currentCarNumber - 1].transform.Rotate(new Vector3(0.0f, -tempSwipeDist.x * Time.deltaTime, 0.0f));
             }
             
@@ -503,7 +495,7 @@ public class NewCarSelectMenu : MonoBehaviour {
             swipeDist = new Vector2( (Input.mousePosition.x - startPos.x), 0);
             //swipeDistx = new Vector2((touch.position.x - startPos.x), 0);
             // avgDistance = Mathf.Sqrt((swipeDist*swipeDist) + (swipeDistx*swipeDistx));
-            Debug.Log(swipeDist.x);
+            //Debug.Log(swipeDist.x);
            //cars[currentCarNumber-1].transform.Rotate(new Vector3(0.0f, swipeDist.x * Time.deltaTime, 0.0f));
             //float avgDistY = touch.position.y - startPos.y;
             if (swipeDist.x < -50)

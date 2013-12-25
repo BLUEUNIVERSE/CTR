@@ -30,6 +30,7 @@ public class MainMenu : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+	    Time.timeScale = 1.0f;
         //GetComponent<TweenPosition>().from = point1.position;
         //GetComponent<TweenPosition>().to = point2.position;
 
